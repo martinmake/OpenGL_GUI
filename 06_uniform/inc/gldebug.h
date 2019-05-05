@@ -34,7 +34,11 @@ inline bool glLogCall()
 			case GL_OUT_OF_MEMORY:
 				fprintf(stderr, "GL_OUT_OF_MEMORY");
 				break;
+			default:
+				fprintf(stderr, "UNKNOWN ERROR (0x%04X)", error);
+				break;
 		}
+		fprintf(stderr, "\n");
 		found_error = true;
 	}
 
