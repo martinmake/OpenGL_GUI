@@ -37,14 +37,24 @@ int main(void) {
 	float positions[4][2] = {
 		{ -0.5, -0.5 },
 		{  0.5, -0.5 },
-		{  0.0,  0.5 },
+		{  0.5,  0.5 },
+		{ -0.5,  0.5 }
 	};
 	unsigned int buffer;
 	glCall(glGenBuffers(1, &buffer));
 	glCall(glBindBuffer(GL_ARRAY_BUFFER, buffer));
-	glCall(glBufferData(GL_ARRAY_BUFFER, 3 * 2 * sizeof(float), positions, GL_STATIC_DRAW));
+	glCall(glBufferData(GL_ARRAY_BUFFER, 4 * 2 * sizeof(float), positions, GL_STATIC_DRAW));
 	glCall(glEnableVertexAttribArray(0));
 	glCall(glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 2 * sizeof(float), 0));
+
+	unsigned int indices[2][3] = {
+		{ 0, 1, 2 },
+		{ 2, 3, 0 }
+	};
+	unsigned int ibo;
+	glCall(glGenBuffers(1, &ibo));
+	glCall(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ibo));
+	glCall(glBufferData(GL_ELEMENT_ARRAY_BUFFER, 2 * 3 * sizeof(unsigned int), indices, GL_STATIC_DRAW));
 
 	ShaderSource source = parse_shader(PROOT"/res/shaders/basic.shader");
  	unsigned int shader_program = create_shader(source.vertex, source.fragment);
@@ -56,7 +66,7 @@ int main(void) {
 		glCall(glClear(GL_COLOR_BUFFER_BIT));
 
 		// draw 3 triangles from index 0
-		glCall(glDrawArrays(GL_TRIANGLES, 0, 3));
+		glCall(glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, nullptr));
 
 		// swap front and back buffers
 		glfwSwapBuffers(window);
