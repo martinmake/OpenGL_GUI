@@ -25,17 +25,40 @@ ShaderSource parse_shader(const std::string& path)
 	std::stringstream ss[2];
 	ShaderType type = ShaderType::NONE;
 
-	while (getline(stream, line)) {
-		if (line.find("#shader") != std::string::npos) {
+	while (getline(stream, line))
+	{
+		if (line.find("#shader") != std::string::npos)
+		{
 			if (line.find("vertex") != std::string::npos)
 				type = ShaderType::VERTEX;
 			else if (line.find("fragment") != std::string::npos)
 				type = ShaderType::FRAGMENT;
-		} else
+		}
+		else
+		{
 			ss[(int) type] << line << '\n';
+		}
 	}
 
 	return { ss[(int) ShaderType::VERTEX].str(), ss[(int) ShaderType::FRAGMENT].str() };
+}
+
+unsigned int create_shader(const ShaderSource& shader_source)
+{
+	unsigned int program = glCreateProgram();
+	unsigned int vs = compile_shader(GL_VERTEX_SHADER, shader_source.vertex);
+	unsigned int fs = compile_shader(GL_FRAGMENT_SHADER, shader_source.fragment);
+
+	glAttachShader(program, vs);
+	glAttachShader(program, fs);
+
+	glLinkProgram(program);
+	glValidateProgram(program);
+
+	glDeleteShader(vs);
+	glDeleteShader(fs);
+
+	return program;
 }
 
 unsigned int compile_shader(unsigned int type, const std::string& source)
@@ -60,22 +83,4 @@ unsigned int compile_shader(unsigned int type, const std::string& source)
 	}
 
 	return id;
-}
-
-unsigned int create_shader(const std::string& vertex_shader, const std::string& fragment_shader)
-{
-	unsigned int program = glCreateProgram();
-	unsigned int vs = compile_shader(GL_VERTEX_SHADER, vertex_shader);
-	unsigned int fs = compile_shader(GL_FRAGMENT_SHADER, fragment_shader);
-
-	glAttachShader(program, vs);
-	glAttachShader(program, fs);
-
-	glLinkProgram(program);
-	glValidateProgram(program);
-
-	glDeleteShader(vs);
-	glDeleteShader(fs);
-
-	return program;
 }
