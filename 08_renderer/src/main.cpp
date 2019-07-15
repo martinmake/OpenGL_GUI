@@ -8,11 +8,7 @@
 
 #include "gldebug.h"
 
-#include "vertex_array.h"
-#include "vertex_buffer.h"
-#include "vertex_buffer_layout.h"
-#include "index_buffer.h"
-#include "shader.h"
+#include "renderer.h"
 
 int main(void)
 {
@@ -31,6 +27,7 @@ int main(void)
 	glCall(std::cout << "[GL VERSION]   " << glGetString(GL_VERSION)                  << std::endl);
 	glCall(std::cout << "[GLSL VERSION] " << glGetString(GL_SHADING_LANGUAGE_VERSION) << std::endl);
 
+	Renderer renderer;
 	VertexArray vao;
 
 	float positions[4 * 2] =
@@ -63,7 +60,7 @@ int main(void)
 		glCall(glClear(GL_COLOR_BUFFER_BIT));
 
 		shader.set_uniform4f("u_Color", (sin(t) + 1) / 2, 0.0, (cos(t) + 1) / 2, 1.0);
-		glCall(glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, nullptr));
+		renderer.draw(vao, ibo, shader);
 
 		t += increment;
 
