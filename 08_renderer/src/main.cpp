@@ -12,22 +12,8 @@
 
 int main(void)
 {
-	GLFWwindow* window;
 
-	assert(glfwInit() && "GLFW init");
-	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
-	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
-	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
-	window = glfwCreateWindow(640, 480, "Visualization Window", NULL, NULL);
-	assert(window && "GLFW create_window");
-	glfwMakeContextCurrent(window);
-	glfwSwapInterval(1);
-	assert(glewInit() == GLEW_OK && "GLEW init");
-
-	glCall(std::cout << "[GL VERSION]   " << glGetString(GL_VERSION)                  << std::endl);
-	glCall(std::cout << "[GLSL VERSION] " << glGetString(GL_SHADING_LANGUAGE_VERSION) << std::endl);
-
-	Renderer renderer;
+	Renderer renderer(640, 420, "Visualization Window");
 	VertexArray vao;
 
 	float positions[4 * 2] =
@@ -55,7 +41,7 @@ int main(void)
 
 	float t = 0.0;
 	float increment = 0.01;
-	while (!glfwWindowShouldClose(window))
+	while (!glfwWindowShouldClose(renderer.window()))
 	{
 		glCall(glClear(GL_COLOR_BUFFER_BIT));
 
@@ -64,7 +50,7 @@ int main(void)
 
 		t += increment;
 
-		glfwSwapBuffers(window);
+		glfwSwapBuffers(renderer.window());
 		glfwPollEvents();
 	}
 

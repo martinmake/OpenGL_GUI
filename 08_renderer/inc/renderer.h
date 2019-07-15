@@ -11,12 +11,24 @@
 
 class Renderer
 {
+	private:
+		GLFWwindow* m_window;
+
 	public:
-		Renderer(void);
+		Renderer(int width, int height, const std::string& title);
 		~Renderer(void);
 
 	public:
 		void draw(const VertexArray& vertex_array, const IndexBuffer& index_buffer, const Shader& shader) const;
+
+	// GETTERS
+	public:
+		GLFWwindow* window(void);
 };
+
+inline GLFWwindow* Renderer::window(void)
+{
+	return m_window;
+}
 
 #endif
