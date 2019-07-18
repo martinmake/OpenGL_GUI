@@ -1,0 +1,52 @@
+include $(MAKEFILE).config
+
+C_SRCS  :=$(shell find -name '*.c'  )
+CXX_SRCS:=$(shell find -name '*.cpp')
+
+C_OBJS  :=$(C_SRCS:.c=.o)
+CXX_OBJS:=$(CXX_SRCS:.cpp=.o)
+OBJS    :=$(C_OBJS) $(CXX_OBJS)
+
+INC:=$(addprefix -I,$(IDIRS) $(LIDIR))
+
+CCFLAGS :=$(OPTIMIZATION) -std=c99
+CXXFLAGS:=$(OPTIMIZATION) -std=c++14
+ARFLAGS :=rUucv
+
+.SECONDARY: $(OBJS)
+
+.PHONY: all
+all:
+	make limited_jobs -j1
+
+.PHONY: limited_jobs
+limited_jobs: $(ARC)
+	@echo "> BUILDING VENDOR"
+	$(SIZE) $(ARC) -t | sed -e 's/^/* /'
+	@echo "< BUILDING VENDOR DONE"
+
+$(ARC): $(ARC)($(OBJS))
+	@echo "> UPDATING ARCHIVE SYMBOL DIRECTORY"
+	$(RANLIB) $@
+	@echo "> UPDATING ARCHIVE SYMBOL DIRECTORY DONE"
+
+$(ARC)(%.o): %.o
+	@echo "> ARCHIVING $<"
+	$(AR) $(ARFLAGS) $@ $<
+	@echo "< ARCHIVING $< DONE"
+
+%.o: %.c
+	@echo "> COMPILING: $<"
+	$(CC)  $(CCFLAGS) -c $< -o $@
+	@echo "< COMPILING: $< DONE"
+%.o: %.cpp
+	@echo "> COMPILING: $<"
+	$(CXX) $(CXXFLAGS) -c $< -o $@
+	@echo "< COMPILING: $< DONE"
+
+.PHONY: clean
+clean: CLEAN_FILES:=$(ARC) $(OBJS)
+clean:
+	@echo "> CLEANING"
+	-rm -vfr $(shell echo $(CLEAN_FILES) | tr " " "\n" | sort) | sed -e 's/^/* /'
+	@echo "< CLEANING DONE"

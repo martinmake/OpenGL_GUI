@@ -2,6 +2,12 @@
 #define _RENDERER_H_
 
 #include <GL/glew.h>
+#include <GLFW/glfw3.h>
+
+#include <glm/glm.hpp>
+#include <glm/gtc/matrix_transform.hpp>
+
+#include <vendor/imgui/imgui.h>
 
 #include "vertex_array.h"
 #include "vertex_buffer.h"
@@ -21,6 +27,8 @@ class Renderer
 
 	public:
 		void draw(const VertexArray& vertex_array, const IndexBuffer& index_buffer, const Shader& shader) const;
+		void start_frame() const;
+		void end_frame() const;
 
 	// GETTERS
 	public:

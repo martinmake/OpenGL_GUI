@@ -1,4 +1,4 @@
- MAKEFILE:=../Makefile.proj
+MAKEFILE:=../../Makefile.vendor
 
 export MAKEFILE
 

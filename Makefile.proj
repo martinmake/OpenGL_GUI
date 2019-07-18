@@ -36,7 +36,7 @@ all: $(ELF)
 	$(SIZE) $(HEX) | sed -e 's/^/* /'
 	@echo "< BUILDING DONE"
 
-$(ELF): $(OBJS)
+$(ELF): $(OBJS) $(VARC)
 	@echo "> LINKING"
 	$(LD) $(LDFLAGS) $^ $(LIBS) -o $@
 	@echo "< LINKING DONE"
@@ -53,6 +53,10 @@ $(ODIR)/%.o: $(SDIR)/%.S
 	@echo "> COMPILING: $<"
 	$(ASMC) $(ASMFLAGS) -c $< -o $@
 	@echo "< COMPILING: $< DONE"
+$(VARC):
+	@echo "> COMPILING VENDOR"
+	+make -C $(VDIR) | stdbuf -oL sed 's/^/\t/g'
+	@echo "< COMPILING VENDOR DONE"
 
 $(DDIR)/%.d: $(SDIR)/%.c
 	@echo "> BUILDING DEPENDENCY: $<"
@@ -80,6 +84,9 @@ clean:
 	@echo "> CLEANING"
 	-rm -vfr $(shell echo $(CLEAN_FILES) | tr " " "\n" | sort) | sed -e 's/^/* /'
 	@echo "< CLEANING DONE"
+	@echo "> CLEANING VENDOR"
+	+make -C $(VDIR) clean | sed 's/^/\t/'
+	@echo "< CLEANING VENDOR DONE"
 
 ifeq ($(NODEP),)
 -include $(patsubst $(SDIR)/%.c,  $(DDIR)/%.d,$(C_SRCS)  )
