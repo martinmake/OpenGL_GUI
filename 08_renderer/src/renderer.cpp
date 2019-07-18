@@ -16,6 +16,9 @@ Renderer::Renderer(int width, int height, const std::string& title)
 
 	glCall(std::cout << "[GL VERSION]   " << glGetString(GL_VERSION)                  << std::endl);
 	glCall(std::cout << "[GLSL VERSION] " << glGetString(GL_SHADING_LANGUAGE_VERSION) << std::endl);
+
+	glCall(glEnable(GL_BLEND));
+	glCall(glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA));
 }
 
 Renderer::~Renderer(void)

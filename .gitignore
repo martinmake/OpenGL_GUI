@@ -55,3 +55,4 @@ HARDWARE/martin_make_eagle_lib/*
 
 # Other
 HARDWARE/line_follower/printing/*
+*compile_commands.json

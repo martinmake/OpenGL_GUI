@@ -4,6 +4,9 @@
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
 
+#include <glm/glm.hpp>
+#include <glm/gtc/matrix_transform.hpp>
+
 #include <string>
 #include <unordered_map>
 #include <inttypes.h>
@@ -22,7 +25,9 @@ class Shader
 
 	public:
 		int get_uniform_location(const std::string& name);
-		void set_uniform4f(const std::string& name, float v0, float v1, float v2, float v3);
+		void set_uniform_4f(const std::string& name, float v0, float v1, float v2, float v3);
+		void set_uniform_1i(const std::string& name, int v0);
+		void set_uniform_mat4f(const std::string& name, glm::mat4 m0);
 
 		void bind(void)   const;
 		void unbind(void) const;

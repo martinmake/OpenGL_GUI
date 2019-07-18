@@ -8,6 +8,7 @@
 #include "vertex_buffer_layout.h"
 #include "index_buffer.h"
 #include "shader.h"
+#include "texture.h"
 
 class Renderer
 {

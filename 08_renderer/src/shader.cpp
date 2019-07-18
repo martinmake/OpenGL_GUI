@@ -10,13 +10,13 @@ struct ShaderSource
 		    fragment;
 };
 
-extern ShaderSource parse_shader(const std::string& path);
+extern ShaderSource parse_shader(const std::string& filepath);
 extern unsigned int create_shader(const ShaderSource& shader_source);
 extern unsigned int compile_shader(unsigned int type, const std::string& source);
 
-Shader::Shader(const std::string& path)
+Shader::Shader(const std::string& filepath)
 {
-	m_renderer_id = create_shader(parse_shader(path));
+	m_renderer_id = create_shader(parse_shader(filepath));
 	bind();
 }
 
@@ -41,7 +41,7 @@ int Shader::get_uniform_location(const std::string& name)
 	return location;
 }
 
-void Shader::set_uniform4f(const std::string& name, float v0, float v1, float v2, float v3)
+void Shader::set_uniform_4f(const std::string& name, float v0, float v1, float v2, float v3)
 {
 	int location = get_uniform_location(name);
 
@@ -51,9 +51,29 @@ void Shader::set_uniform4f(const std::string& name, float v0, float v1, float v2
 	glCall(glUniform4f(location, v0, v1, v2, v3));
 }
 
-ShaderSource parse_shader(const std::string& path)
+void Shader::set_uniform_1i(const std::string& name, int v0)
 {
-	std::ifstream stream(path);
+	int location = get_uniform_location(name);
+
+	if (location == -1)
+		return;
+
+	glCall(glUniform1i(location, v0));
+}
+
+void Shader::set_uniform_mat4f(const std::string& name, glm::mat4 m0)
+{
+	int location = get_uniform_location(name);
+
+	if (location == -1)
+		return;
+
+	glCall(glUniformMatrix4fv(location, 1, GL_FALSE, &m0[0][0]));
+}
+
+ShaderSource parse_shader(const std::string& filepath)
+{
+	std::ifstream stream(filepath);
 
 	enum class ShaderType
 	{
@@ -86,40 +106,44 @@ ShaderSource parse_shader(const std::string& path)
 
 unsigned int create_shader(const ShaderSource& shader_source)
 {
-	unsigned int program = glCreateProgram();
+	unsigned int program;
 	unsigned int vs = compile_shader(GL_VERTEX_SHADER, shader_source.vertex);
 	unsigned int fs = compile_shader(GL_FRAGMENT_SHADER, shader_source.fragment);
 
-	glAttachShader(program, vs);
-	glAttachShader(program, fs);
+	glCall(program = glCreateProgram());
 
-	glLinkProgram(program);
-	glValidateProgram(program);
+	glCall(glAttachShader(program, vs));
+	glCall(glAttachShader(program, fs));
 
-	glDeleteShader(vs);
-	glDeleteShader(fs);
+	glCall(glLinkProgram(program));
+	glCall(glValidateProgram(program));
+
+	glCall(glDeleteShader(vs));
+	glCall(glDeleteShader(fs));
 
 	return program;
 }
 
 unsigned int compile_shader(unsigned int type, const std::string& source)
 {
-	unsigned int id = glCreateShader(type);
+	unsigned int id;
 	const char* src = source.c_str();
 	int result;
 
-	glShaderSource(id, 1, &src, nullptr);
-	glCompileShader(id);
+	glCall(id = glCreateShader(type));
 
-	glGetShaderiv(id, GL_COMPILE_STATUS, &result);
+	glCall(glShaderSource(id, 1, &src, nullptr));
+	glCall(glCompileShader(id));
+
+	glCall(glGetShaderiv(id, GL_COMPILE_STATUS, &result));
 	if (result == GL_FALSE) {
 		int length;
-		glGetShaderiv(id, GL_INFO_LOG_LENGTH, &length);
+		glCall(glGetShaderiv(id, GL_INFO_LOG_LENGTH, &length));
 		char* message = (char *) alloca(length * sizeof(char));
-		glGetShaderInfoLog(id, length, &length, message);
+		glCall(glGetShaderInfoLog(id, length, &length, message));
 		std::cout << "Failed to compile " << (type == GL_VERTEX_SHADER ?  "VERTEX" : "FRAGMENT") << " shader!" << std::endl;
 		std::cout << message << std::endl;
-		glDeleteShader(id);
+		glCall(glDeleteShader(id));
 		return 0;
 	}
 

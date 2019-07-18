@@ -1,8 +1,10 @@
+PROJECT_ROOT_DIRECTORY:=\"$(realpath .)\"
+
 include $(MAKEFILE).config
 include Makefile.config
 
 LIBS+=glfw GL GLEW
-DEFS+=$(EDEFS) PROOT='"$(realpath .)"'
+DEFS+=$(EDEFS) PROJECT_ROOT_DIRECTORY=$(PROJECT_ROOT_DIRECTORY)
 
 LIBS  :=$(addprefix -l,$(LIBS))
 DEFS  :=$(addprefix -D,$(DEFS))
@@ -73,9 +75,10 @@ setup:
 	@echo "< MAKING DIRECTORIES DONE"
 
 .PHONY: clean
+clean: CLEAN_FILES:=$(ELF) $(BIN) $(HEX) $(ASM) $(COMPILATION_DATABASE) $(shell find ./$(ODIR) ./$(DDIR) -type f -name '[!.]*')
 clean:
 	@echo "> CLEANING"
-	-rm -vfr ./$(ODIR)/* ./$(DDIR)/* $(ELF) $(HEX) $(BIN) $(ASM) | sed -e 's/^/* /'
+	-rm -vfr $(shell echo $(CLEAN_FILES) | tr " " "\n" | sort) | sed -e 's/^/* /'
 	@echo "< CLEANING DONE"
 
 ifeq ($(NODEP),)
