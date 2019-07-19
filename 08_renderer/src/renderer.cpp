@@ -23,7 +23,7 @@ Renderer::Renderer(int width, int height, const std::string& title)
 
 	assert(glewInit() == GLEW_OK && "GLEW init");
 
-	glCall(std::cout << "[GL VERSION]   " << glGetString(GL_VERSION)                  << std::endl);
+	glCall(std::cout << "[GL   VERSION] " << glGetString(GL_VERSION)                  << std::endl);
 	glCall(std::cout << "[GLSL VERSION] " << glGetString(GL_SHADING_LANGUAGE_VERSION) << std::endl);
 
 	glCall(glEnable(GL_BLEND));

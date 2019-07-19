@@ -19,7 +19,7 @@ class Texture
 		int m_bpp;
 
 	public:
-		Texture(const std::string& filepath);
+		Texture(const std::string& filepath, unsigned int slot = 0);
 		~Texture(void);
 
 	public:
