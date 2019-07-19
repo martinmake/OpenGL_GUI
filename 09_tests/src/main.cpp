@@ -27,12 +27,13 @@ int main(int argc, char* argv[])
 		renderer.start_frame();
 
 		if (test_selector.is_test_running())
+		{
 			test_selector.running_test().on_update(0.0).on_render().on_imgui_render();
+			if (test_selector.running_test().is_done())
+				test_selector.end_test();
+		}
 		else
 			test_selector.on_render().on_imgui_render();
-
-		if (test_selector.running_test().is_done())
-			test_selector.end_test();
 
 		renderer.end_frame();
 	}
