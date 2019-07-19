@@ -1,7 +1,11 @@
 #include "tests/base.h"
 
+#include "renderer.h"
+
 namespace Test
 {
+	const char* Base::name = "BASE";
+
 	Base::Base(void)
 	{
 	}
@@ -10,16 +14,24 @@ namespace Test
 	{
 	}
 
-	void Base::on_update(float delta_time)
+	// EVENT HANDLERS
+	Base& Base::on_update(float delta_time)
 	{
 		(void) delta_time;
-	}
 
-	void Base::on_render(void)
-	{
+		return *this;
 	}
-
-	void Base::on_imgui_render(void)
+	Base& Base::on_render(void)
 	{
+		assert(false && "DO NOT USE BASE TEST, IT IS JUST AN INTERFACE!");
+
+		return *this;
+	}
+	Base& Base::on_imgui_render(void)
+	{
+		if (ImGui::Button("RETURN"))
+			m_is_done = true;
+
+		return *this;
 	}
 }

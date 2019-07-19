@@ -6,32 +6,33 @@
 #include "gldebug.h"
 
 #include "renderer.h"
+#include "tests/selector.h"
 
-#include "tests/clear_color.h"
+#define WINDOW_WIDTH  640
+#define WINDOW_HEIGHT 420
 
-#define WINDOW_WIDTH  640.0
-#define WINDOW_HEIGHT 420.0
-
-int main(void)
+int main(int argc, char* argv[])
 {
-
 	Renderer renderer(WINDOW_WIDTH, WINDOW_HEIGHT, "Visualization Window");
 
-	Test::Base tests[] =
+	Test::Selector test_selector;
+
+	if (argc > 1)
 	{
-		Test::ClearColor()
-	};
+		test_selector.run_test(argv[1]);
+	}
 
 	while (!glfwWindowShouldClose(renderer.window()))
 	{
 		renderer.start_frame();
 
-		for (Test::Base& test : tests)
-		{
-			test.on_update(0.0);
-			test.on_render();
-			test.on_imgui_render();
-		}
+		if (test_selector.is_test_running())
+			test_selector.running_test().on_update(0.0).on_render().on_imgui_render();
+		else
+			test_selector.on_render().on_imgui_render();
+
+		if (test_selector.running_test().is_done())
+			test_selector.end_test();
 
 		renderer.end_frame();
 	}

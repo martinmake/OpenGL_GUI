@@ -7,19 +7,22 @@
 
 namespace Test
 {
-	class ClearColor : public Base
+	class ClearColor : virtual public Base
 	{
+		public:
+			static const char* name;
 		private:
 			glm::vec4 m_clear_color;
 
 		public:
 			ClearColor(void);
-			~ClearColor(void);
+			~ClearColor(void) override;
 
+		// EVENT HANDLERS
 		public:
-			void on_update(float delta_time);
-			void on_render(void);
-			void on_imgui_render(void);
+			ClearColor& on_update(float delta_time) override;
+			ClearColor& on_render(void)             override;
+			ClearColor& on_imgui_render(void)       override;
 	};
 }
 

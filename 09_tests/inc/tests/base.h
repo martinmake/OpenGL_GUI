@@ -1,19 +1,33 @@
 #ifndef _TESTS_BASE_H_
 #define _TESTS_BASE_H_
 
+#include <string>
+
 namespace Test
 {
 	class Base
 	{
 		public:
-			Base(void);
-			~Base(void);
+			static const char* name;
+		protected:
+			bool m_is_done = false;
 
 		public:
-			void on_update(float delta_time);
-			void on_render(void);
-			void on_imgui_render(void);
+			Base(void);
+			virtual ~Base(void);
+
+		// EVENT HANDLERS
+		public:
+			virtual Base& on_update(float delta_time);
+			virtual Base& on_render(void);
+			virtual Base& on_imgui_render(void);
+
+		// GETTERS
+		public:
+			bool is_done(void) const;
 	};
+
+	inline bool Base::is_done(void) const { return m_is_done; }
 }
 
 #endif

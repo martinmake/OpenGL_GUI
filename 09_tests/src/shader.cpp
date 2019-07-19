@@ -10,13 +10,13 @@ struct ShaderSource
 		    fragment;
 };
 
-extern ShaderSource parse_shader(const std::string& filepath);
-extern unsigned int create_shader(const ShaderSource& shader_source);
+extern std::string load_shader(const std::string& filepath);
+extern unsigned int create_shader(const std::string& filepath);
 extern unsigned int compile_shader(unsigned int type, const std::string& source);
 
 Shader::Shader(const std::string& filepath)
 {
-	m_renderer_id = create_shader(parse_shader(filepath));
+	m_renderer_id = create_shader(filepath);
 	bind();
 }
 
@@ -71,44 +71,20 @@ void Shader::set_uniform_mat4f(const std::string& name, glm::mat4 m0)
 	glCall(glUniformMatrix4fv(location, 1, GL_FALSE, &m0[0][0]));
 }
 
-ShaderSource parse_shader(const std::string& filepath)
+std::string load_shader(const std::string& filepath)
 {
 	std::ifstream stream(filepath);
+	std::stringstream source_buffer;
+	source_buffer << stream.rdbuf();
 
-	enum class ShaderType
-	{
-		NONE     = -1,
-		VERTEX   =  0,
-		FRAGMENT =  1
-	};
-
-	std::string line;
-	std::stringstream ss[2];
-	ShaderType type = ShaderType::NONE;
-
-	while (getline(stream, line))
-	{
-		if (line.find("#shader") != std::string::npos)
-		{
-			if (line.find("vertex") != std::string::npos)
-				type = ShaderType::VERTEX;
-			else if (line.find("fragment") != std::string::npos)
-				type = ShaderType::FRAGMENT;
-		}
-		else
-		{
-			ss[(int) type] << line << '\n';
-		}
-	}
-
-	return { ss[(int) ShaderType::VERTEX].str(), ss[(int) ShaderType::FRAGMENT].str() };
+	return source_buffer.str();
 }
 
-unsigned int create_shader(const ShaderSource& shader_source)
+unsigned int create_shader(const std::string& filepath)
 {
 	unsigned int program;
-	unsigned int vs = compile_shader(GL_VERTEX_SHADER, shader_source.vertex);
-	unsigned int fs = compile_shader(GL_FRAGMENT_SHADER, shader_source.fragment);
+	unsigned int vs = compile_shader(GL_VERTEX_SHADER,   load_shader(filepath + "/vertex.vs"));
+	unsigned int fs = compile_shader(GL_FRAGMENT_SHADER, load_shader(filepath + "/fragment.fs"));
 
 	glCall(program = glCreateProgram());
 
