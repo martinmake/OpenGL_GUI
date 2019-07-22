@@ -22,6 +22,7 @@ namespace Render
 			std::unordered_map<std::string, int> m_uniform_location_chache;
 
 		public:
+			Shader(void);
 			Shader(const std::string& path);
 			~Shader(void);
 

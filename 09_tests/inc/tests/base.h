@@ -3,6 +3,8 @@
 
 #include <string>
 
+#include "renderer.h"
+
 namespace Test
 {
 	class Base
@@ -19,7 +21,7 @@ namespace Test
 		// EVENT HANDLERS
 		public:
 			virtual Base& on_update(float delta_time);
-			virtual Base& on_render(void);
+			virtual Base& on_render(const Render::Renderer& renderer);
 			virtual Base& on_imgui_render(void);
 
 		// GETTERS

@@ -17,6 +17,7 @@ namespace Render
 			uint32_t m_count;
 
 		public:
+			IndexBuffer(void);
 			IndexBuffer(const unsigned int* data, uint32_t count);
 			~IndexBuffer(void);
 

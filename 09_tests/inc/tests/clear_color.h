@@ -20,9 +20,9 @@ namespace Test
 
 		// EVENT HANDLERS
 		public:
-			ClearColor& on_update(float delta_time) override;
-			ClearColor& on_render(void)             override;
-			ClearColor& on_imgui_render(void)       override;
+			ClearColor& on_update(float delta_time)                 override;
+			ClearColor& on_render(const Render::Renderer& renderer) override;
+			ClearColor& on_imgui_render(void)                       override;
 	};
 }
 

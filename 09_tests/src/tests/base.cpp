@@ -21,8 +21,11 @@ namespace Test
 
 		return *this;
 	}
-	Base& Base::on_render(void)
+	Base& Base::on_render(const Render::Renderer& renderer)
 	{
+
+		(void) renderer;
+
 		assert(false && "DO NOT USE BASE TEST, IT IS JUST AN INTERFACE!");
 
 		return *this;

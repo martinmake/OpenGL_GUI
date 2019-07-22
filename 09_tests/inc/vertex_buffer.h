@@ -16,6 +16,7 @@ namespace Render
 			unsigned int m_renderer_id;
 
 		public:
+			VertexBuffer(void);
 			VertexBuffer(const void* data, uint32_t size);
 			~VertexBuffer(void);
 

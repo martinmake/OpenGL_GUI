@@ -2,6 +2,9 @@
 
 namespace Render
 {
+	VertexBuffer::VertexBuffer(void)
+	{
+	}
 	VertexBuffer::VertexBuffer(const void* data, uint32_t size)
 	{
 		glCall(glGenBuffers(1, &m_renderer_id));

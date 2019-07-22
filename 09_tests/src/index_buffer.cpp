@@ -2,6 +2,9 @@
 
 namespace Render
 {
+	IndexBuffer::IndexBuffer(void)
+	{
+	}
 	IndexBuffer::IndexBuffer(const unsigned int* data, uint32_t count)
 		: m_count(count)
 	{

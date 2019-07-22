@@ -21,8 +21,10 @@ namespace Test
 
 		return *this;
 	}
-	ClearColor& ClearColor::on_render(void)
+	ClearColor& ClearColor::on_render(const Render::Renderer& renderer)
 	{
+		(void) renderer;
+
 		glCall(glClearColor(m_clear_color.r, m_clear_color.g, m_clear_color.b, m_clear_color.a));
 		glCall(glClear(GL_COLOR_BUFFER_BIT));
 

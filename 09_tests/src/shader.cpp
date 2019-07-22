@@ -16,6 +16,9 @@ extern unsigned int compile_shader(unsigned int type, const std::string& source)
 
 namespace Render
 {
+	Shader::Shader(void)
+	{
+	}
 	Shader::Shader(const std::string& filepath)
 	{
 		m_renderer_id = create_shader(filepath);
