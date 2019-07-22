@@ -14,61 +14,64 @@ extern std::string load_shader(const std::string& filepath);
 extern unsigned int create_shader(const std::string& filepath);
 extern unsigned int compile_shader(unsigned int type, const std::string& source);
 
-Shader::Shader(const std::string& filepath)
+namespace Render
 {
-	m_renderer_id = create_shader(filepath);
-	bind();
-}
+	Shader::Shader(const std::string& filepath)
+	{
+		m_renderer_id = create_shader(filepath);
+		bind();
+	}
 
-Shader::~Shader(void)
-{
-	glCall(glDeleteProgram(m_renderer_id));
-}
+	Shader::~Shader(void)
+	{
+		glCall(glDeleteProgram(m_renderer_id));
+	}
 
-int Shader::get_uniform_location(const std::string& name)
-{
-	if (m_uniform_location_chache.find(name) != m_uniform_location_chache.end())
-		return m_uniform_location_chache[name];
+	int Shader::get_uniform_location(const std::string& name)
+	{
+		if (m_uniform_location_chache.find(name) != m_uniform_location_chache.end())
+			return m_uniform_location_chache[name];
 
-	int location;
-	glCall(location = glGetUniformLocation(m_renderer_id, name.c_str()));
+		int location;
+		glCall(location = glGetUniformLocation(m_renderer_id, name.c_str()));
 
-	m_uniform_location_chache[name] = location;
+		m_uniform_location_chache[name] = location;
 
-	if (location == -1)
-		std::cerr << "[INVALID UNIFORM] " << name << std::endl;
+		if (location == -1)
+			std::cerr << "[INVALID UNIFORM] " << name << std::endl;
 
-	return location;
-}
+		return location;
+	}
 
-void Shader::set_uniform_4f(const std::string& name, float v0, float v1, float v2, float v3)
-{
-	int location = get_uniform_location(name);
+	void Shader::set_uniform_4f(const std::string& name, float v0, float v1, float v2, float v3)
+	{
+		int location = get_uniform_location(name);
 
-	if (location == -1)
-		return;
+		if (location == -1)
+			return;
 
-	glCall(glUniform4f(location, v0, v1, v2, v3));
-}
+		glCall(glUniform4f(location, v0, v1, v2, v3));
+	}
 
-void Shader::set_uniform_1i(const std::string& name, int v0)
-{
-	int location = get_uniform_location(name);
+	void Shader::set_uniform_1i(const std::string& name, int v0)
+	{
+		int location = get_uniform_location(name);
 
-	if (location == -1)
-		return;
+		if (location == -1)
+			return;
 
-	glCall(glUniform1i(location, v0));
-}
+		glCall(glUniform1i(location, v0));
+	}
 
-void Shader::set_uniform_mat4f(const std::string& name, glm::mat4 m0)
-{
-	int location = get_uniform_location(name);
+	void Shader::set_uniform_mat4f(const std::string& name, glm::mat4 m0)
+	{
+		int location = get_uniform_location(name);
 
-	if (location == -1)
-		return;
+		if (location == -1)
+			return;
 
-	glCall(glUniformMatrix4fv(location, 1, GL_FALSE, &m0[0][0]));
+		glCall(glUniformMatrix4fv(location, 1, GL_FALSE, &m0[0][0]));
+	}
 }
 
 std::string load_shader(const std::string& filepath)
@@ -125,4 +128,3 @@ unsigned int compile_shader(unsigned int type, const std::string& source)
 
 	return id;
 }
-

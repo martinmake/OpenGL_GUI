@@ -13,7 +13,7 @@
 
 int main(int argc, char* argv[])
 {
-	Renderer renderer(WINDOW_WIDTH, WINDOW_HEIGHT, "Visualization Window");
+	Render::Renderer renderer(WINDOW_WIDTH, WINDOW_HEIGHT, "Visualization Window");
 
 	Test::Selector test_selector;
 

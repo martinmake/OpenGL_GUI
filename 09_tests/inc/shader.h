@@ -13,34 +13,37 @@
 
 #include "gldebug.h"
 
-class Shader
+namespace Render
 {
-	private:
-		unsigned int m_renderer_id;
-		std::unordered_map<std::string, int> m_uniform_location_chache;
+	class Shader
+	{
+		private:
+			unsigned int m_renderer_id;
+			std::unordered_map<std::string, int> m_uniform_location_chache;
 
-	public:
-		Shader(const std::string& path);
-		~Shader(void);
+		public:
+			Shader(const std::string& path);
+			~Shader(void);
 
-	public:
-		int get_uniform_location(const std::string& name);
-		void set_uniform_4f(const std::string& name, float v0, float v1, float v2, float v3);
-		void set_uniform_1i(const std::string& name, int v0);
-		void set_uniform_mat4f(const std::string& name, glm::mat4 m0);
+		public:
+			int get_uniform_location(const std::string& name);
+			void set_uniform_4f(const std::string& name, float v0, float v1, float v2, float v3);
+			void set_uniform_1i(const std::string& name, int v0);
+			void set_uniform_mat4f(const std::string& name, glm::mat4 m0);
 
-		void bind(void)   const;
-		void unbind(void) const;
-};
+			void bind(void)   const;
+			void unbind(void) const;
+	};
 
-inline void Shader::bind(void) const
-{
- 	glCall(glUseProgram(m_renderer_id));
-}
+	inline void Shader::bind(void) const
+	{
+		glCall(glUseProgram(m_renderer_id));
+	}
 
-inline void Shader::unbind(void) const
-{
- 	glCall(glUseProgram(0));
+	inline void Shader::unbind(void) const
+	{
+		glCall(glUseProgram(0));
+	}
 }
 
 #endif

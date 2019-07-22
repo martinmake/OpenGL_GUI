@@ -8,28 +8,31 @@
 
 #include "gldebug.h"
 
-class VertexBuffer
+namespace Render
 {
-	private:
-		unsigned int m_renderer_id;
+	class VertexBuffer
+	{
+		private:
+			unsigned int m_renderer_id;
 
-	public:
-		VertexBuffer(const void* data, uint32_t size);
-		~VertexBuffer(void);
+		public:
+			VertexBuffer(const void* data, uint32_t size);
+			~VertexBuffer(void);
 
-	public:
-		void bind(void)   const;
-		void unbind(void) const;
-};
+		public:
+			void bind(void)   const;
+			void unbind(void) const;
+	};
 
-inline void VertexBuffer::bind(void) const
-{
-	glCall(glBindBuffer(GL_ARRAY_BUFFER, m_renderer_id));
-}
+	inline void VertexBuffer::bind(void) const
+	{
+		glCall(glBindBuffer(GL_ARRAY_BUFFER, m_renderer_id));
+	}
 
-inline void VertexBuffer::unbind(void) const
-{
-	glCall(glBindBuffer(GL_ARRAY_BUFFER, 0));
+	inline void VertexBuffer::unbind(void) const
+	{
+		glCall(glBindBuffer(GL_ARRAY_BUFFER, 0));
+	}
 }
 
 #endif

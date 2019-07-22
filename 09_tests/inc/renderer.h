@@ -16,28 +16,31 @@
 #include "shader.h"
 #include "texture.h"
 
-class Renderer
+namespace Render
 {
-	private:
-		GLFWwindow* m_window;
+	class Renderer
+	{
+		private:
+			GLFWwindow* m_window;
 
-	public:
-		Renderer(int width, int height, const std::string& title);
-		~Renderer(void);
+		public:
+			Renderer(int width, int height, const std::string& title);
+			~Renderer(void);
 
-	public:
-		void draw(const VertexArray& vertex_array, const IndexBuffer& index_buffer, const Shader& shader) const;
-		void start_frame() const;
-		void end_frame() const;
+		public:
+			void draw(const VertexArray& vertex_array, const IndexBuffer& index_buffer, const Shader& shader) const;
+			void start_frame() const;
+			void end_frame() const;
 
-	// GETTERS
-	public:
-		GLFWwindow* window(void);
-};
+		// GETTERS
+		public:
+			GLFWwindow* window(void);
+	};
 
-inline GLFWwindow* Renderer::window(void)
-{
-	return m_window;
+	inline GLFWwindow* Renderer::window(void)
+	{
+		return m_window;
+	}
 }
 
 #endif

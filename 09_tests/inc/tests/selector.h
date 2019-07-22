@@ -14,8 +14,8 @@ namespace Test
 			Test::Base* m_running_test;
 			const std::map<const std::string, std::function<Test::Base*()>> m_test_database =
 			{
-				 {       Base::name, [](){ return new       Base(); } },
-				 { ClearColor::name, [](){ return new ClearColor(); } }
+				 { ClearColor::name, [](){ return new ClearColor(); } },
+				 { Texture::name,    [](){ return new Texture();    } },
 			};
 
 		public:

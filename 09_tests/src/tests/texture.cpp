@@ -1,18 +1,13 @@
+#include <iostream>
+
 #include "tests/texture.h"
 #include "renderer.h"
 
-#define FILEPATH_BUFFER_SIZE 256
-
-int load_texture(ImGuiInputTextCallbackData* userdata)
-{
-
-
-	return 0;
-}
+#define TEXTURE_NOT_FOUND_TEXTURE_FILEPATH PROJECT_TEXTURE_DIRECTORY"/texture_not_found.png"
 
 namespace Test
 {
-	const char* Texture::name = "CLEAR COLOR";
+	const char* Texture::name = "TEXTURE";
 
 	Texture::Texture(void)
 	{
@@ -36,7 +31,12 @@ namespace Test
 	Texture& Texture::on_imgui_render(void)
 	{
 		ImGui::Begin(name);
-		ImGui::InputText("TEXTURE FILEPATH", m_filepath, FILEPATH_BUFFER_SIZE, ImGuiInputTextFlags_None, load_texture, m_filepath);
+		if (ImGui::InputText("FILEPATH", m_filepath.data(), FILEPATH_BUFFER_SIZE, ImGuiInputTextFlags_EnterReturnsTrue))
+		{
+			if(!m_texture.load(m_filepath.data()))
+				m_texture.load(TEXTURE_NOT_FOUND_TEXTURE_FILEPATH);
+		}
+
 		Base::on_imgui_render();
 		ImGui::End();
 

@@ -2,8 +2,12 @@
 #define _TESTS_TEXTURE_H_
 
 #include <glm/glm.hpp>
+#include <array>
+#include "renderer.h"
 
 #include "tests/base.h"
+
+#define FILEPATH_BUFFER_SIZE 256
 
 namespace Test
 {
@@ -12,7 +16,8 @@ namespace Test
 		public:
 			static const char* name;
 		private:
-			char* m_filepath;
+			std::array<char, FILEPATH_BUFFER_SIZE> m_filepath;
+			Render::Texture m_texture;
 
 		public:
 			Texture(void);
